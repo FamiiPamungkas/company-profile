@@ -1,22 +1,51 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import {Head} from '@inertiajs/react';
+import {User} from '@/types';
+import DashboardLayout from "@/Layouts/DashboardLayout";
+import {Card, CardContent, CardHeader, CardTitle} from "@/Components/ui/card";
 
-export default function Dashboard({ auth }: PageProps) {
+interface Props {
+    auth: {
+        user: User
+    },
+    userCount: number
+}
+
+export default function Dashboard({auth, userCount}: Props) {
     return (
-        <AuthenticatedLayout
+        <DashboardLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard </h2>}
         >
-            <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">You're logged in!</div>
-                    </div>
-                </div>
+            <Head title="TEset"/>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Users
+                        </CardTitle>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            className="h-4 w-4 text-muted-foreground"
+                        >
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">+{userCount}</div>
+                        <p className="text-xs text-muted-foreground">
+                            {/*+180.1% from last month*/}
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }
