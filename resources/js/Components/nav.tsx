@@ -9,7 +9,10 @@ import {Link} from "@inertiajs/react";
 
 interface NavProps {
     isCollapsed: boolean
+    activeNav: string
     links: {
+        path: string
+        name: string
         title: string
         label?: string
         icon: LucideIcon
@@ -17,7 +20,8 @@ interface NavProps {
     }[]
 }
 
-export function Nav({links, isCollapsed}: NavProps) {
+export function Nav({links, activeNav, isCollapsed}: NavProps) {
+
     return (
         <div
             data-collapsed={isCollapsed}
@@ -25,16 +29,17 @@ export function Nav({links, isCollapsed}: NavProps) {
         >
             <nav
                 className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-                {links.map((link, index) =>
-                        isCollapsed ? (
+                {links.map((link, index) => {
+                        const variant = link.name == activeNav ? "default" : "ghost";
+                        return isCollapsed ? (
                             <Tooltip key={index} delayDuration={0}>
                                 <TooltipTrigger asChild>
                                     <Link
-                                        href="#"
+                                        href={link.path}
                                         className={cn(
-                                            buttonVariants({variant: link.variant, size: "icon"}),
+                                            buttonVariants({variant: variant, size: "icon"}),
                                             "h-9 w-9",
-                                            link.variant === "default" &&
+                                            variant === "default" &&
                                             "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                                         )}
                                     >
@@ -52,29 +57,27 @@ export function Nav({links, isCollapsed}: NavProps) {
                         ) : (
                             <Link
                                 key={index}
-                                href="#"
+                                href={link.path}
                                 className={cn(
-                                    buttonVariants({variant: link.variant, size: "sm"}),
-                                    link.variant === "default" &&
+                                    buttonVariants({variant: variant, size: "sm"}),
+                                    variant === "default" &&
                                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                                     "justify-start"
-                                )}
-                            >
+                                )}>
                                 <link.icon className="mr-2 h-4 w-4"/>
                                 {link.title}
                                 {link.label && (
                                     <span
                                         className={cn(
                                             "ml-auto",
-                                            link.variant === "default" &&
+                                            variant === "default" &&
                                             "text-background dark:text-white"
                                         )}
-                                    >
-                  {link.label}
-                </span>
+                                    > {link.label} </span>
                                 )}
                             </Link>
                         )
+                    }
                 )}
             </nav>
         </div>

@@ -1,16 +1,33 @@
-import {PropsWithChildren, ReactNode, useState} from 'react';
+import {PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import {User} from '@/types';
 import {ResizableHandle, ResizablePanel, ResizablePanelGroup} from "@/Components/ui/resizable";
 import {Gauge, Users} from "lucide-react";
 import {Nav} from "@/Components/nav";
 import {TooltipProvider} from "@/Components/ui/tooltip";
 import {UserNav} from "@/Components/user-nav";
+import {usePage} from "@inertiajs/react";
 
-export default function DashboardLayout({user, header, children}: PropsWithChildren<{
+const viewAccess = new Map<string, string>([
+    ['/users', 'users'],
+    ['/dashboard', 'dashboard'],
+]);
+
+export default function DashboardLayout({header, children}: PropsWithChildren<{
     user: User,
     header?: ReactNode
 }>) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [activeNav, setActiveNav] = useState("");
+    const url = usePage().url.split("?")[0];
+
+    useEffect(() => {
+        setActiveNav(viewAccess.get(url) || "");
+    }, [])
+
+    function onCollapse() {
+        setIsCollapsed(true);
+        console.log(url);
+    }
 
     return (
         <TooltipProvider delayDuration={0}>
@@ -20,16 +37,24 @@ export default function DashboardLayout({user, header, children}: PropsWithChild
                         collapsible={true}
                         defaultSize={15} minSize={14} maxSize={20}
                         collapsedSize={5}
-                        onCollapse={() => setIsCollapsed(true)}
+                        onCollapse={() => onCollapse()}
                         onExpand={() => setIsCollapsed(false)}
                     >
-                        <Nav isCollapsed={isCollapsed}
+                        <Nav activeNav={activeNav} isCollapsed={isCollapsed}
                              links={[
-                                 {title: "Dashboard", icon: Gauge, variant: "default"},
+                                 {
+                                     title: "Dashboard",
+                                     name: "dashboard",
+                                     icon: Gauge,
+                                     variant: "default",
+                                     path: "/dashboard"
+                                 },
                                  {
                                      title: "User",
+                                     name: "users",
                                      icon: Users,
-                                     variant: "ghost"
+                                     variant: "ghost",
+                                     path: "/users"
                                  }]}/>
                     </ResizablePanel>
                     <ResizableHandle withHandle/>
@@ -37,7 +62,7 @@ export default function DashboardLayout({user, header, children}: PropsWithChild
                         <div className="hidden h-full flex-1 flex-col space-y-5 p-5 md:flex">
                             <div className="flex items-center justify-between space-y-2">
                                 <div>
-                                    <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
+                                    {header}
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <UserNav/>

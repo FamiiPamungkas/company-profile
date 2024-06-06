@@ -14,9 +14,9 @@ export default function Dashboard({auth, userCount}: Props) {
     return (
         <DashboardLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard </h2>}
+            header={<h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>}
         >
-            <Head title="TEset"/>
+            <Head title="Dashboard"/>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
