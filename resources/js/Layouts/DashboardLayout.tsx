@@ -6,6 +6,7 @@ import {Nav} from "@/Components/nav";
 import {TooltipProvider} from "@/Components/ui/tooltip";
 import {UserNav} from "@/Components/user-nav";
 import {usePage} from "@inertiajs/react";
+import {initializeCsrf} from "@/lib/axiosInstance";
 
 const viewAccess = new Map<string, string>([
     ['/users', 'users'],
@@ -21,6 +22,7 @@ export default function DashboardLayout({header, children}: PropsWithChildren<{
     const url = usePage().url.split("?")[0];
 
     useEffect(() => {
+        initializeCsrf();
         setActiveNav(viewAccess.get(url) || "");
     }, [])
 

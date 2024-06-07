@@ -30,6 +30,6 @@ class DashboardController extends Controller
 
     public function users(Request $request): Response
     {
-        return Inertia::render('Users');
+        return Inertia::render('UsersPage');
     }
 }
